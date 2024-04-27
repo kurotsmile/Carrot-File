@@ -59,14 +59,20 @@ namespace Carrot
             }
             else
             {
-                this.StandaloneFileBrowser_filter = new ExtensionFilter[query.list_extension_file.Count];
-                var extensions = new[] {
-                    new ExtensionFilter("Image Files", "png", "jpg", "jpeg" ),
-                    new ExtensionFilter("Sound Files", "mp3", "wav" ),
-                    new ExtensionFilter("All Files", "*" ),
-                };
-                StandaloneFileBrowser.OpenFilePanelAsync("Open File", "", extensions, false, (string[] paths) => {
-                    Act_done(paths);
+                this.StandaloneFileBrowser_filter = new ExtensionFilter[query.list_extension_file.Count+1];
+
+                for(int i = 0; i < this.StandaloneFileBrowser_filter.Length-1; i++)
+                {
+                    string[] extension_file = query.list_extension_file[i];
+                    this.StandaloneFileBrowser_filter[i] = new ExtensionFilter(query.s_title_file_data[i], extension_file);
+                }
+
+                this.StandaloneFileBrowser_filter[this.StandaloneFileBrowser_filter.Length - 1] = new ExtensionFilter("All Files", "*");
+                StandaloneFileBrowser.OpenFilePanelAsync("Open File", "", this.StandaloneFileBrowser_filter, false, (string[] paths) => {
+                    if (paths.Length > 0)
+                        Act_done(paths);
+                    else
+                        Act_cancel();
                 });
             }
         }
