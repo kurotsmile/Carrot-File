@@ -1,11 +1,13 @@
 using SFB;
 using SimpleFileBrowser;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Carrot
 {
     public enum Carrot_File_Type {SimpleFileBrowser,StandaloneFileBrowser}
+    public enum Carrot_File_Data {Image,JsonData}
     public class Carrot_File_Query
     {
         public List<string> s_title_file_data;
@@ -36,6 +38,24 @@ namespace Carrot
 
         private FileBrowser.Filter[] SimpleFileBrowser_filter;
         private ExtensionFilter[] StandaloneFileBrowser_filter;
+
+        public void Set_filter(Carrot_File_Data type_data)
+        {
+            Carrot_File_Query q = new();
+            if (type_data == Carrot_File_Data.Image)
+            {
+                q.SetDefaultFilter("jpg");
+                q.Add_filter("Images", "jpg", "png", "jpeg");
+                q.Add_filter("Pain", "bmp", "tiff", "tga");
+            }
+
+            if (type_data == Carrot_File_Data.JsonData)
+            {
+
+            }
+
+            this.Handle_filter(q);
+        }
 
         private void Handle_filter(Carrot_File_Query query)
         {
@@ -71,10 +91,10 @@ namespace Carrot
             }
         }
 
-        public void Open_file(Carrot_File_Query query,FileBrowser.OnSuccess Act_done,FileBrowser.OnCancel Act_cancel)
+        public void Open_file(FileBrowser.OnSuccess Act_done, FileBrowser.OnCancel Act_cancel= null)
         {
-            this.Handle_filter(query);
-            if (this.type == Carrot_File_Type.SimpleFileBrowser) { 
+            if (this.type == Carrot_File_Type.SimpleFileBrowser)
+            {
                 FileBrowser.ShowLoadDialog(Act_done, Act_cancel, FileBrowser.PickMode.Files, false);
             }
             else
@@ -83,21 +103,26 @@ namespace Carrot
                     if (paths.Length > 0)
                         Act_done(paths);
                     else
-                        Act_cancel();
+                        Act_cancel?.Invoke();
                 });
             }
         }
 
-        public void Save_file(Carrot_File_Query query,FileBrowser.OnSuccess Act_done, FileBrowser.OnCancel Act_cancel)
+        public void Open_file(Carrot_File_Query query,FileBrowser.OnSuccess Act_done,FileBrowser.OnCancel Act_cancel = null)
         {
             this.Handle_filter(query);
+            this.Open_file(Act_done, Act_cancel);
+        }
+
+        public void Save_file(FileBrowser.OnSuccess Act_done, FileBrowser.OnCancel Act_cancel=null)
+        {
             if (this.type == Carrot_File_Type.SimpleFileBrowser)
             {
                 FileBrowser.ShowSaveDialog(Act_done, Act_cancel, FileBrowser.PickMode.Files, false);
             }
             else
             {
-                StandaloneFileBrowser.SaveFilePanelAsync("Save File", "","Myfile", this.StandaloneFileBrowser_filter,(string path) => {
+                StandaloneFileBrowser.SaveFilePanelAsync("Save File", "", "Myfile", this.StandaloneFileBrowser_filter, (string path) => {
                     if (path != "")
                     {
                         string[] paths = new string[1];
@@ -106,10 +131,16 @@ namespace Carrot
                     }
                     else
                     {
-                        Act_cancel();
-                    } 
+                        Act_cancel?.Invoke();
+                    }
                 });
             }
+        }
+
+        public void Save_file(Carrot_File_Query query,FileBrowser.OnSuccess Act_done, FileBrowser.OnCancel Act_cancel=null)
+        {
+            this.Handle_filter(query);
+            this.Save_file(Act_done, Act_cancel);
         }
     }
 }
