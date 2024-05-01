@@ -51,7 +51,9 @@ namespace Carrot
 
             if (type_data == Carrot_File_Data.JsonData)
             {
-
+                q.SetDefaultFilter("json");
+                q.Add_filter("Json Data", "json", "jsons");
+                q.Add_filter("Text Data", "txt");
             }
 
             this.Handle_filter(q);
