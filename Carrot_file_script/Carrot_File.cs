@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Carrot
 {
     public enum Carrot_File_Type {SimpleFileBrowser,StandaloneFileBrowser}
-    public enum Carrot_File_Data {Image,JsonData}
+    public enum Carrot_File_Data {Image,JsonData,ExelData}
     public class Carrot_File_Query
     {
         public List<string> s_title_file_data;
@@ -53,6 +53,13 @@ namespace Carrot
             {
                 q.SetDefaultFilter("json");
                 q.Add_filter("Json Data", "json", "jsons");
+                q.Add_filter("Text Data", "txt");
+            }
+
+            if (type_data == Carrot_File_Data.ExelData)
+            {
+                q.SetDefaultFilter("csv");
+                q.Add_filter("Exel Data", "csv","rtf","xlsx");
                 q.Add_filter("Text Data", "txt");
             }
 
@@ -139,7 +146,29 @@ namespace Carrot
             }
         }
 
+        public void Open_folders(FileBrowser.OnSuccess Act_done, FileBrowser.OnCancel Act_cancel = null)
+        {
+            if (this.type == Carrot_File_Type.SimpleFileBrowser)
+            {
+                FileBrowser.ShowLoadDialog(Act_done, Act_cancel, FileBrowser.PickMode.Folders, false);
+            }
+            else
+            {
+                string[] s_path=StandaloneFileBrowser.OpenFolderPanel("Open Folde", "", false);
+                    if (s_path.Length > 0)
+                        Act_done(s_path);
+                    else
+                        Act_cancel?.Invoke();
+            }
+        }
+
         public void Save_file(Carrot_File_Query query,FileBrowser.OnSuccess Act_done, FileBrowser.OnCancel Act_cancel=null)
+        {
+            this.Handle_filter(query);
+            this.Save_file(Act_done, Act_cancel);
+        }
+
+        public void Save_fold(Carrot_File_Query query, FileBrowser.OnSuccess Act_done, FileBrowser.OnCancel Act_cancel = null)
         {
             this.Handle_filter(query);
             this.Save_file(Act_done, Act_cancel);
