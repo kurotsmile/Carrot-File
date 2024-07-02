@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Carrot
 {
     public enum Carrot_File_Type {SimpleFileBrowser,StandaloneFileBrowser}
-    public enum Carrot_File_Data {Image,JsonData,ExelData}
+    public enum Carrot_File_Data {Image,JsonData,ExelData,AudioData}
     public class Carrot_File_Query
     {
         public List<string> s_title_file_data;
