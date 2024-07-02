@@ -63,6 +63,13 @@ namespace Carrot
                 q.Add_filter("Text Data", "txt");
             }
 
+            if (type_data == Carrot_File_Data.AudioData)
+            {
+                q.SetDefaultFilter("mp3");
+                q.Add_filter("Compressed audio", "mp3", "ogg", "s3m");
+                q.Add_filter("Uncompressed audio", "wav", "aiff");
+            }
+
             this.Handle_filter(q);
         }
 
