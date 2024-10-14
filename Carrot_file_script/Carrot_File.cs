@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Carrot
 {
     public enum Carrot_File_Type {SimpleFileBrowser,StandaloneFileBrowser}
-    public enum Carrot_File_Data {Image,JsonData,ExelData,AudioData}
+    public enum Carrot_File_Data {Image,JsonData,ExelData,AudioData,PDFDocument}
     public class Carrot_File_Query
     {
         public List<string> s_title_file_data;
@@ -68,6 +68,13 @@ namespace Carrot
                 q.SetDefaultFilter("mp3");
                 q.Add_filter("Compressed audio", "mp3", "ogg", "s3m");
                 q.Add_filter("Uncompressed audio", "wav", "aiff");
+            }
+
+            if (type_data == Carrot_File_Data.PDFDocument)
+            {
+                q.SetDefaultFilter("pfd");
+                q.Add_filter("Portable Document Format", "pdf");
+                q.Add_filter("Forms Data Format", "xfdf", "aiff", "fdf");
             }
 
             this.Handle_filter(q);
