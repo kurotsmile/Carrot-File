@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Carrot
 {
     public enum Carrot_File_Type {SimpleFileBrowser,StandaloneFileBrowser}
-    public enum Carrot_File_Data {Image,JsonData,ExelData,AudioData,PDFDocument}
+    public enum Carrot_File_Data {Image,JsonData,ExelData,AudioData,PDFDocument,TextDocument}
     public class Carrot_File_Query
     {
         public List<string> s_title_file_data;
@@ -77,6 +77,11 @@ namespace Carrot
                 q.Add_filter("Forms Data Format", "xfdf", "aiff", "fdf");
             }
 
+            if (type_data == Carrot_File_Data.TextDocument)
+            {
+                q.SetDefaultFilter("txt");
+                q.Add_filter("Text Data", "txt");
+            }
             this.Handle_filter(q);
         }
 
