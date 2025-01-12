@@ -85,7 +85,7 @@ namespace Carrot
             this.Handle_filter(q);
         }
 
-        private void Handle_filter(Carrot_File_Query query)
+        public void Handle_filter(Carrot_File_Query query)
         {
             if (this.type == Carrot_File_Type.SimpleFileBrowser)
             {
